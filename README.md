@@ -8,7 +8,6 @@
 
 
 ##安装Homebrew
-
 ***如果你已经按官方的方式安装了Homebrew，那么直接更换源，未必有效果。请先删除已下载的Homebrew。***
 
 ***删除 `/usr/local/Homebrew` 目录即可。***
