@@ -7,7 +7,7 @@
 
 
 
-### 安装Homebrew
+## 安装Homebrew
 ***如果你已经按官方的方式安装了Homebrew，那么直接更换源，未必有效果。请先删除已下载的Homebrew。***
 
 ***删除 `/usr/local/Homebrew` 目录即可。***
@@ -31,7 +31,7 @@ git clone git://mirrors.ustc.edu.cn/homebrew-core.git/ /usr/local/Homebrew/Libra
 
 
 
-### 更换成中科大的源
+## 更换成中科大的源
 
 更换bottles源，打开用户根目录下的~/.zshrc 文件，加入以下代码:
 
@@ -67,7 +67,7 @@ brew update
 
 
 
-### 安装cask(可选)
+## 安装cask(可选)
 
 如果需要的话，可安装cask。
 
