@@ -15,11 +15,24 @@ installShFileName = 'install222.sh'
 
 
 #运行install.sh
-print('开始运行'+installShFileName)
-pipe = subprocess.Popen(["sh", curFileDir + "/" + installShFileName], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-(outData , errData) = pipe.communicate()
-if pipe.returncode <= 1:
-    print('OK')
-    print(outData.decode())
-else:
-    print(errData.decode())
+def runInstallSh() :
+    print('开始运行'+installShFileName)
+    pipe = subprocess.Popen(["sh", curFileDir + "/" + installShFileName], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    
+    # while(True):
+    #     # returns None while subprocess is running
+    #     retcode = pipe.poll() 
+    #     line = pipe.stdout.readline()
+    #     yield line    
+    #     if retcode is not None:
+    #         break
+
+    (outData , errData) = pipe.communicate()
+    if pipe.returncode <= 1:
+        print('OK')
+        print(outData.decode())
+    else:
+        print(errData.decode())
+
+
+runInstallSh()
