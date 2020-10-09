@@ -1,11 +1,11 @@
 # -*- coding:  utf-8 -*-
 import os
 import sys
-from subprocess import PIPE, Popen
+from subprocess import PIPE, STDOUT, Popen
 
 curFileDir = os.path.dirname(__file__)
 ustcSource = 'mirrors.ustc.edu.cn'
-installShFileName = '222.sh'
+installShFileName = 'install.sh'
 
 def runCommand(command, endOutpuptStr=""):
     """
@@ -16,20 +16,17 @@ def runCommand(command, endOutpuptStr=""):
     """
     isSucess = True
     print('endOutpuptStr:'+endOutpuptStr)
-    with Popen(command, stdout=PIPE, bufsize=1, universal_newlines=True) as pipe:
-        # for line in pipe.stdout:
-        #     print(line)
-        #     print(line, end='')
-            
-        #     if endOutpuptStr != "" and line.find(endOutpuptStr) != -1:
-        #         print('强制结束命令')
-        #         pipe.terminate()
-        #         break
+    with Popen(command, stdout=PIPE, stderr=STDOUT, bufsize=1, universal_newlines=True) as pipe:
+        for line in pipe.stdout:
+            print(line, end='')
+            if endOutpuptStr != "" and line.startswith(endOutpuptStr):
+                print('强制结束命令')
+                pipe.terminate()
+                break
 
-        # if pipe.wait() > 0:
-        #     isSucess = False
-        (outData, ErrData) = pipe.communicate()
-        print("out:::::::::::::::::"+ErrData.decode())
+        if pipe.wait() > 0:
+            isSucess = False
+
     return isSucess
 
 def runCommandSerial(command, endOutpuptStr=""):
@@ -57,9 +54,7 @@ def getCurrentShellName():
     else:
         return "other"
 
-runCommandSerial(["git","clone"])
-#test
-exit()
+runCommandSerial(["git","clone"], "usage: git clone")
 
 #给install.sh加权限
 print('给' + installShFileName + '加执行权限，需要输入电脑密码: ')
