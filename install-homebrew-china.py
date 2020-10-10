@@ -1,7 +1,8 @@
 # -*- coding:  utf-8 -*-
 import os
-import sys
+import sys,shutil
 from subprocess import PIPE, STDOUT, Popen
+from pathlib import Path
 
 curFileDir = os.path.dirname(__file__)
 ustcSource = 'mirrors.ustc.edu.cn'
@@ -15,13 +16,12 @@ def runCommand(command, endOutpuptStr=""):
     返回是否执行成功。
     """
     isSucess = True
-    print('endOutpuptStr:'+endOutpuptStr)
     with Popen(command, stdout=PIPE, stderr=STDOUT, bufsize=1, universal_newlines=True) as pipe:
         for line in pipe.stdout:
             print(line, end='')
             if endOutpuptStr != "" and line.startswith(endOutpuptStr):
                 print('强制结束命令')
-                pipe.terminate()
+                pipe.kill()
                 break
 
         if pipe.wait() > 0:
@@ -54,8 +54,6 @@ def getCurrentShellName():
     else:
         return "other"
 
-runCommandSerial(["git","clone"], "usage: git clone")
-
 #给install.sh加权限
 print('给' + installShFileName + '加执行权限，需要输入电脑密码: ')
 runCommandSerial(["sudo", "chmod", "+x", curFileDir + "/" + installShFileName])
@@ -67,9 +65,15 @@ runCommandSerial(["sh", curFileDir + "/" + installShFileName],
 
 #手动运行git clone命令
 print('把homebrew-core 运行git clone到本地')
+corePathStr = "/usr/local/Homebrew/Library/Taps/homebrew/homebrew-core"
+corePath = Path(corePathStr)
+if corePath.exists():
+    print("删除已有的homebrew-core目录")
+    shutil.rmtree(corePathStr, ignore_errors=True)
+
 runCommandSerial([
     "git", "clone", "git://" + ustcSource + "/homebrew-core.git/",
-    "/usr/local/Homebrew/Library/Taps/homebrew/homebrew-core", "--depth=1"
+    corePathStr, "--depth=1"
 ])
 
 #更换shell的bottles
